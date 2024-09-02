@@ -9,7 +9,7 @@ from src.trackers.COMMON import COMMON
 from src.console import console
 
 
-class BLU():
+class PTG():
     """
     Edit for Tracker:
         Edit BASE.torrent with announce and source
@@ -19,28 +19,22 @@ class BLU():
     """
     def __init__(self, config):
         self.config = config
-        self.tracker = 'BLU'
-        self.source_flag = 'BLU'
-        self.search_url = 'https://blutopia.cc/api/torrents/filter'
-        self.torrent_url = 'https://blutopia.cc/api/torrents/'
-        self.upload_url = 'https://blutopia.cc/api/torrents/upload'
-        self.signature = "\n[center][url=https://blutopia.cc/forums/topics/3087/posts/42941]Created by L4G's Upload Assistant[/url][/center]"
-        self.banned_groups = [
-            '[Oj]', '3LTON', '4yEo', 'ADE', 'AFG', 'AniHLS', 'AnimeRG', 'AniURL', 'AROMA', 'aXXo', 'Brrip', 'CHD', 'CM8', 'CrEwSaDe', 'd3g', 'DeadFish', 'DNL', 'ELiTE', 'eSc', 'FaNGDiNG0', 'FGT', 'Flights',
-            'FRDS', 'FUM', 'HAiKU', 'HD2DVD', 'HDS', 'HDTime', 'Hi10', 'ION10', 'iPlanet', 'JIVE', 'KiNGDOM', 'Leffe', 'LEGi0N', 'LOAD', 'MeGusta', 'mHD', 'mSD', 'NhaNc3', 'nHD', 'nikt0', 'NOIVTC', 'OFT',
-            'nSD', 'PiRaTeS', 'playBD', 'PlaySD', 'playXD', 'PRODJi', 'RAPiDCOWS', 'RARBG', 'RetroPeeps', 'RDN', 'REsuRRecTioN', 'RMTeam', 'SANTi', 'SicFoI', 'SPASM', 'SPDVD', 'STUTTERSHIT', 'Telly', 'TM',
-            'TRiToN', 'UPiNSMOKE', 'URANiME', 'WAF', 'x0r', 'xRed', 'XS', 'YIFY', 'ZKBL', 'ZmN', 'ZMNT', 'AOC',
-            ['EVO', 'Raw Content Only'], ['TERMiNAL', 'Raw Content Only'], ['ViSION', 'Note the capitalization and characters used'], ['CMRG', 'Raw Content Only']
-        ]
+        self.tracker = 'PTG'
+        self.source_flag = 'Portugas'
+        self.search_url = 'https://portugas.org/api/torrents/filter'
+        self.torrent_url = 'https://portugas.org/api/torrents/'
+        self.upload_url = 'https://portugas.org/api/torrents/upload'
+        self.signature = "\n[center][url=https://github.com/crKtv/PTG-Upload-Assistant]Portugas Upload Assistant[/url][/center]"
+        self.banned_groups = []
 
         pass
 
     async def upload(self, meta):
         common = COMMON(config=self.config)
-        blu_name = meta['name']
+        ptg_name = meta['name']
         desc_header = ""
         if meta.get('webdv', False):
-            blu_name, desc_header = await self.derived_dv_layer(meta)
+            ptg_name, desc_header = await self.derived_dv_layer(meta)
         await common.edit_torrent(meta, self.tracker, self.source_flag)
         await common.unit3d_edit_desc(meta, self.tracker, self.signature, comparison=True, desc_header=desc_header)
         cat_id = await self.get_cat_id(meta['category'], meta.get('edition', ''))
@@ -59,11 +53,11 @@ class BLU():
         else:
             mi_dump = open(f"{meta['base_dir']}/tmp/{meta['uuid']}/MEDIAINFO.txt", 'r', encoding='utf-8').read()
             bd_dump = None
-        desc = open(f"{meta['base_dir']}/tmp/{meta['uuid']}/[BLU]DESCRIPTION.txt", 'r').read()
-        open_torrent = open(f"{meta['base_dir']}/tmp/{meta['uuid']}/[BLU]{meta['clean_name']}.torrent", 'rb')
+        desc = open(f"{meta['base_dir']}/tmp/{meta['uuid']}/[PTG]DESCRIPTION.txt", 'r').read()
+        open_torrent = open(f"{meta['base_dir']}/tmp/{meta['uuid']}/[PTG]{meta['clean_name']}.torrent", 'rb')
         files = {'torrent': ("placeholder.torrent", open_torrent, "application/x-bittorrent")}
         data = {
-            'name': blu_name,
+            'name': ptg_name,
             'description': desc,
             'mediainfo': mi_dump,
             'bdinfo': bd_dump,
@@ -85,6 +79,8 @@ class BLU():
             'free': 0,
             'doubleup': 0,
             'sticky': 0,
+            'audio_pt': 0,
+            'legenda_pt': 0,
         }
         # Internal
         if self.config['TRACKERS'][self.tracker].get('internal', False) is True:
@@ -122,36 +118,36 @@ class BLU():
         category_id = {
             'MOVIE': '1',
             'TV': '2',
-            'FANRES': '3'
+            'MOVIE/ANIME': '10'
+            'TV/ANIME': '11'
         }.get(category_name, '0')
-        if category_name == 'MOVIE' and 'FANRES' in edition:
-            category_id = '3'
         return category_id
 
     async def get_type_id(self, type):
         type_id = {
             'DISC': '1',
-            'REMUX': '3',
+            'REMUX': '2',
             'WEBDL': '4',
-            'WEBRIP': '5',
+            'WEBRIP': '39',
             'HDTV': '6',
-            'ENCODE': '12'
+            'ENCODE': '3',
+            'TVRIP': '27'
         }.get(type, '0')
         return type_id
 
     async def get_res_id(self, resolution):
         resolution_id = {
-            '8640p': '10',
-            '4320p': '11',
-            '2160p': '1',
-            '1440p': '2',
-            '1080p': '2',
-            '1080i': '3',
+            '4320p': '1',
+            '2160p': '2',
+            '1080p': '3',
+            '1080i': '4',
             '720p': '5',
             '576p': '6',
             '576i': '7',
             '480p': '8',
-            '480i': '9'
+            '480i': '9',
+            'Other': '10',
+            '540p': '11',
         }.get(resolution, '10')
         return resolution_id
 

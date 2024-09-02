@@ -118,7 +118,7 @@ class PTG():
         category_id = {
             'MOVIE': '1',
             'TV': '2',
-            'MOVIE/ANIME': '10'
+            'MOVIE/ANIME': '10',
             'TV/ANIME': '11'
         }.get(category_name, '0')
         return category_id

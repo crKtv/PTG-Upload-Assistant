@@ -39,6 +39,7 @@ from src.trackers.CBR import CBR
 from src.trackers.UTP import UTP
 from src.trackers.AL import AL
 from src.trackers.SHRI import SHRI
+from src.trackers.PTG import PTG
 import json
 from pathlib import Path
 import asyncio

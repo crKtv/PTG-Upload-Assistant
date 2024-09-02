@@ -238,6 +238,7 @@ config = {
         "PTG": {
             "api_key": "PTG api key",
             "announce_url": "https://portugas.org/announce/customannounceurl",
+        }
     },
 
     # enable_search to true will automatically try and find a suitable hash to save having to rehash when creating torrents
